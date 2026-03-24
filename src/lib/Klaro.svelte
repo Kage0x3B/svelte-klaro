@@ -37,9 +37,17 @@
 
         /**
          * Base URL of the KIProtect/Klaro API.
-         * @default 'https://cdn.kiprotect.com/klaro'
+         * @default 'https://api.kiprotect.com'
          */
         klaroApiUrl?: string;
+
+        /**
+         * Additional translations to merge on top of the bundled English defaults
+         * and any translations in config. Useful when config is loaded from a remote
+         * API and doesn't include translations. Pass language objects imported from
+         * 'svelte-klaro/translations', e.g. `translations={{ de, fr }}`.
+         */
+        translations?: Record<string, Record<string, unknown>>;
 
         onconsentchange?: (consents: Record<string, boolean>, service: string, value: boolean) => void;
         onsave?: (manager: ConsentManager, eventType: string) => void;
@@ -56,6 +64,7 @@
         klaroId,
         klaroConfigName,
         klaroApiUrl,
+        translations: translationsProp,
         onconsentchange,
         onsave,
         onapply,
@@ -93,10 +102,13 @@
     function initializeWithConfig(cfg: KlaroConfigInterface) {
         cfg = validateConfig(cfg);
 
-        // Only English is bundled by default. Users import additional languages
-        // from 'svelte-klaro/translations' and pass them via config.translations.
+        // Merge translations: bundled English → translations prop → config.translations
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const trans = convertToMap({ en } as any);
+        if (translationsProp) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            updateMap(trans, convertToMap(translationsProp as any));
+        }
         if (cfg.translations) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             updateMap(trans, convertToMap(cfg.translations as any));
@@ -120,7 +132,7 @@
 
         // API setup
         if (klaroId) {
-            api = new KlaroApi(klaroApiUrl || 'https://cdn.kiprotect.com/klaro', klaroId, { testing });
+            api = new KlaroApi(klaroApiUrl || 'https://api.kiprotect.com', klaroId, { testing });
         }
 
         // KlaroInstance for API event handlers

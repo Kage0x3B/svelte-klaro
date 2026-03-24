@@ -1,11 +1,29 @@
 {
     "name": "svelte-klaro",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "description": "Svelte 5 cookie consent manager — a complete port of Klaro with reactive state, tree-shakeable translations, and CSS custom property theming.",
+    "license": "MIT",
+    "keywords": [
+        "svelte",
+        "sveltekit",
+        "cookie",
+        "consent",
+        "privacy",
+        "gdpr",
+        "klaro",
+        "cookie-banner",
+        "cookie-consent"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Kage0x3B/svelte-klaro.git"
+    },
     "scripts": {
         "dev": "vite dev",
         "build": "vite build && pnpm package",
         "preview": "vite preview",
-        "package": "svelte-kit sync && svelte-package && publint",
+        "package": "svelte-kit sync && svelte-package && pnpm package:css && publint",
+        "package:css": "sass src/lib/scss/klaro.scss dist/klaro.css --no-source-map --style=compressed",
         "prepublishOnly": "pnpm package",
         "test": "pnpm test:integration && pnpm test:unit",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -24,7 +42,8 @@
             "types": "./dist/klaro/translations/index.d.ts",
             "import": "./dist/klaro/translations/index.js"
         },
-        "./styles": "./dist/scss/klaro.css"
+        "./styles": "./dist/klaro.css",
+        "./styles/scss": "./dist/scss/klaro.scss"
     },
     "files": [
         "dist",
@@ -63,5 +82,7 @@
     "svelte": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "type": "module",
-    "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+    "engines": {
+        "node": ">=18"
+    }
 }

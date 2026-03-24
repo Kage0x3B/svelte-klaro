@@ -7,7 +7,7 @@ import { ConsentManager } from '$lib/klaro/consent-manager.svelte.js';
 export { updateConfig } from './utils/config.js';
 
 const defaultKlaroConfigName = 'default';
-const defaultKlaroApiUrl = 'https://cdn.kiprotect.com/klaro';
+const defaultKlaroApiUrl = 'https://api.kiprotect.com';
 
 export class KlaroInstance {
     private defaultConfig: KlaroConfigInterface | undefined;

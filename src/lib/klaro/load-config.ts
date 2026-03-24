@@ -1,6 +1,6 @@
 import type { KlaroConfigInterface } from './types/klaro-config.interface.js';
 
-const DEFAULT_API_URL = 'https://cdn.kiprotect.com/klaro';
+const DEFAULT_API_URL = 'https://api.kiprotect.com';
 
 export interface LoadKlaroConfigOptions {
     /**
@@ -10,7 +10,7 @@ export interface LoadKlaroConfigOptions {
 
     /**
      * Base URL of the KIProtect/Klaro API.
-     * @default 'https://cdn.kiprotect.com/klaro'
+     * @default 'https://api.kiprotect.com'
      */
     apiUrl?: string;
 
@@ -38,7 +38,7 @@ export interface LoadKlaroConfigOptions {
  * ```ts
  * // +layout.ts
  * export async function load({ fetch }) {
- *     const config = await loadKlaroConfig('59adda...', { fetch });
+ *     const config = await loadKlaroConfig('your-privacy-manager-id', { fetch });
  *     return { config };
  * }
  * ```
