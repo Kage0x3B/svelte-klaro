@@ -4,6 +4,8 @@
 
 A Svelte 5 port of the [Klaro](https://github.com/kiprotect/klaro) cookie consent manager. Fully typed, reactive, tree-shakeable, and localized (25 languages).
 
+**[See it in action](https://svelte-klaro.moritz.website/)**
+
 ## Features
 
 - Svelte 5, fully typed

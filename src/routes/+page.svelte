@@ -128,8 +128,50 @@
 <div class="demo">
     <header class="demo-header">
         <h1>svelte-klaro</h1>
-        <p class="subtitle">Svelte 5 cookie consent manager</p>
+        <p class="subtitle">
+            Svelte 5 cookie consent manager — a complete port of <a href="https://github.com/kiprotect/klaro">Klaro</a>.
+            Fully typed, reactive, tree-shakeable, and localized.
+        </p>
+        <p class="subtitle">
+            <a href="https://github.com/Kage0x3B/svelte-klaro">Full README on GitHub</a>
+        </p>
     </header>
+
+    <section class="demo-section about">
+        <h2>About</h2>
+        <ul class="feature-list">
+            <li><strong>12 KB gzipped</strong> (vs 66 KB for original Klaro with Preact)</li>
+            <li>Svelte 5 with full TypeScript types</li>
+            <li>25 tree-shakeable translations (only English bundled by default)</li>
+            <li>CSS custom property theming with composable position/color themes</li>
+            <li>Cookie deletion on consent withdrawal</li>
+            <li>Load config from KIProtect API or pass locally</li>
+            <li>SSR-safe</li>
+        </ul>
+
+        <h3>Install</h3>
+        <pre><code>pnpm add svelte-klaro</code></pre>
+
+        <h3>Quick Start</h3>
+        <!-- prettier-ignore -->
+        <pre><code>&lt;script lang="ts"&gt;
+  import {'{'} Klaro, type KlaroConfigInterface {'}'} from 'svelte-klaro';
+  import 'svelte-klaro/styles';
+
+  const config: KlaroConfigInterface = {'{'}
+    acceptAll: true,
+    services: [
+      {'{'} name: 'analytics', title: 'Analytics', purposes: ['analytics'] {'}'}
+    ]
+  {'}'};
+&lt;/script&gt;
+
+&lt;Klaro {'{'}config{'}'} /&gt;</code></pre>
+
+        <p class="read-more">
+            <a href="https://github.com/Kage0x3B/svelte-klaro">Read more on GitHub</a>
+        </p>
+    </section>
 
     <section class="demo-section">
         <h2>Controls</h2>
@@ -284,8 +326,17 @@
 
     .subtitle {
         color: #777;
-        margin: 0;
+        margin: 4px 0 0;
         font-size: 15px;
+    }
+
+    .subtitle a {
+        color: #1a936f;
+        text-decoration: none;
+    }
+
+    .subtitle a:hover {
+        text-decoration: underline;
     }
 
     .demo-section {
@@ -303,6 +354,52 @@
         letter-spacing: 0.5px;
         color: #555;
         margin: 0 0 14px;
+    }
+
+    .about h3 {
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        margin: 16px 0 8px;
+    }
+
+    .feature-list {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #444;
+    }
+
+    .about pre {
+        background: #f5f5f5;
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        padding: 12px 16px;
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .about code {
+        background: none;
+        padding: 0;
+        font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .read-more {
+        margin: 16px 0 0;
+        font-size: 14px;
+    }
+
+    .read-more a {
+        color: #1a936f;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .read-more a:hover {
+        text-decoration: underline;
     }
 
     .muted {
