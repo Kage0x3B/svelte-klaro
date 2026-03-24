@@ -18,6 +18,11 @@
         "type": "git",
         "url": "git+https://github.com/Kage0x3B/svelte-klaro.git"
     },
+    "author": {
+        "name": "Moritz Hein",
+        "email": "moritz.hein@live.de",
+        "url": "https://moritz.website"
+    },
     "scripts": {
         "dev": "vite dev",
         "build": "vite build && pnpm package",
