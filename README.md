@@ -24,11 +24,11 @@ pnpm add svelte-klaro
 ## Quick Start
 
 ```svelte
-<script>
-    import { Klaro } from 'svelte-klaro';
+<script lang="ts">
+    import { Klaro, type KlaroConfigInterface } from 'svelte-klaro';
     import 'svelte-klaro/styles';
 
-    const config = {
+    const config: KlaroConfigInterface = {
         acceptAll: true,
         services: [
             {
