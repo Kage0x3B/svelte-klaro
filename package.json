@@ -12,8 +12,13 @@
         "gdpr",
         "klaro",
         "cookie-banner",
-        "cookie-consent"
+        "cookie-consent",
+        "ePrivacy",
+        "consent-manager",
+        "i18n"
     ],
+    "homepage": "https://github.com/Kage0x3B/svelte-klaro#readme",
+    "bugs": "https://github.com/Kage0x3B/svelte-klaro/issues",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Kage0x3B/svelte-klaro.git"
