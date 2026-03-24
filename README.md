@@ -264,6 +264,29 @@ export async function load({ fetch }) {
 <Klaro klaroId="your-privacy-manager-id" />
 ```
 
+### Consent Tracking
+
+When `klaroId` is set, svelte-klaro automatically submits consent receipts to the KIProtect API — matching the behavior of the original Klaro script. Each time the user saves their choices, a `POST` to `/v1/privacy-managers/{id}/submit` is sent with:
+
+- **consent_data**: which services were accepted/declined and what changed
+- **location_data**: hostname, protocol, port, and pathname (configurable)
+- **user_data**: client name and version
+
+To disable this while still using `klaroId` for config loading:
+
+```svelte
+<Klaro klaroId="your-privacy-manager-id" disableConsentTracking />
+```
+
+You can control whether the page pathname is included via `config.records`:
+
+```js
+const config = {
+    records: { savePathname: false }, // default: true
+    // ...
+};
+```
+
 ## SSR
 
 svelte-klaro is SSR-safe. During server-side rendering it outputs nothing (the consent manager requires browser APIs). The consent notice appears on client hydration.
