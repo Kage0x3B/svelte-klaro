@@ -1,6 +1,6 @@
 {
     "name": "svelte-klaro",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Svelte 5 cookie consent manager — a complete port of Klaro with reactive state, tree-shakeable translations, and CSS custom property theming.",
     "license": "MIT",
     "keywords": [
