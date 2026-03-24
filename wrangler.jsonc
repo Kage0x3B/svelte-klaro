@@ -9,5 +9,9 @@
     "assets": {
         "binding": "ASSETS",
         "directory": ".svelte-kit/cloudflare"
+    },
+    "route": {
+        "custom_domain": true,
+        "pattern": "svelte-klaro.moritz.website"
     }
 }
