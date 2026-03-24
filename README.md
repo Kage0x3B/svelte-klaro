@@ -4,19 +4,13 @@ A Svelte 5 port of the [Klaro](https://github.com/kiprotect/klaro) cookie consen
 
 ## Features
 
-- 1:1 UI/UX match with the original Klaro consent manager
-- Svelte 5 runes for reactive consent state (`$state`, `$derived`)
-- Purpose-grouped or flat service list with toggle switches
-- Consent notice banner + full consent modal
-- Contextual consent notices for blocked iframes/scripts
-- 25 bundled translations (tree-shakeable, only English included by default)
+- Svelte 5, fully typed
+- 1:1 UI/UX match with the original Klaro
+- 25 tree-shakeable translations (only English bundled by default)
 - CSS custom property theming with composable position/color themes
-- Cookie/localStorage/sessionStorage consent persistence
-- Automatic cookie deletion on consent withdrawal
-- Imperative API (`showKlaro()`, `hideKlaro()`, `window.klaro`)
-- Load config from KIProtect API (`loadKlaroConfig()` or `klaroId` prop)
-- Svelte 5 event callback props (`onconsentchange`, `onsave`, etc.)
-- SSR-safe (renders client-side, no server errors)
+- Cookie deletion on consent withdrawal
+- Load config from KIProtect API or pass locally
+- SSR-safe
 
 ## Install
 
