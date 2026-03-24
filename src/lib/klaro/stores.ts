@@ -1,5 +1,5 @@
 import { getCookie, setCookie, deleteCookie } from './utils/cookies.js';
-import type { ConsentManager } from '$lib/klaro/consent-manager.js';
+import type { ConsentManager } from '$lib/klaro/consent-manager.svelte.js';
 import type { Constructable } from '$lib/klaro/types/util-types.js';
 
 export type KlaroStorageMethod = 'test' | 'cookie' | 'localStorage' | 'sessionStorage';

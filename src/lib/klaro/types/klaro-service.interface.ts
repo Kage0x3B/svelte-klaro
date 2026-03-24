@@ -18,10 +18,15 @@ export interface KlaroServiceInterface {
     title?: string;
 
     /**
+     * A description of what the service does.
+     */
+    description?: string;
+
+    /**
      * The purpose(s) of this service. Will be listed on the consent notice.
      * Do not forget to add translations for all purposes you list here.
      */
-    purposes?: string[];
+    purposes: string[];
 
     /**
      * A list of regex expressions or strings giving the names of
@@ -86,7 +91,13 @@ export interface KlaroServiceInterface {
 
     onDecline?: (service: KlaroServiceInterface) => void;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vars?: { [key: string]: any };
 
     onlyOnce?: boolean;
+
+    /**
+     * Per-service translation overrides.
+     */
+    translations?: Record<string, unknown>;
 }

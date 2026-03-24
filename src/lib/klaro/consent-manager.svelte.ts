@@ -15,52 +15,22 @@ export type KlaroConsentWatcher = {
 };
 
 export class ConsentManager {
-    private readonly store: IKlaroStore;
+    readonly store: IKlaroStore;
+    readonly auxiliaryStore: IKlaroStore;
 
-    /**
-     * the consent states of the configured services
-     * @private
-     */
-    private consents: Record<string, boolean>;
+    consents: Record<string, boolean> = $state({});
+    confirmed = $state(false);
+    changed = $state(false);
+    states: Record<string, boolean> = $state({});
 
-    /**
-     * true if the user actively confirmed his/her consent
-     * @private
-     */
-    private confirmed = false;
-
-    /**
-     * true if the service config changed compared to the cookie
-     * @private
-     */
-    private changed = false;
-
-    /**
-     * keep track of the change (enabled, disabled) of individual services
-     * @private
-     */
-    private states: Record<string, boolean> = {};
-
-    /**
-     * keep track of which services have been initialized already
-     * @private
-     */
     private initialized: Record<string, boolean> = {};
-
-    /**
-     * keep track of which services have been executed at least once
-     * @private
-     */
     private executedOnce: Record<string, boolean> = {};
-
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity -- internal watcher set, not used for reactivity
     private watchers = new Set<KlaroConsentWatcher>([]);
-
     private savedConsents: Record<string, boolean>;
 
-    private auxiliaryStore: IKlaroStore;
-
     constructor(
-        private readonly config: KlaroConfigInterface,
+        readonly config: KlaroConfigInterface,
         store?: IKlaroStore,
         auxiliaryStore?: IKlaroStore
     ) {
@@ -122,7 +92,8 @@ export class ConsentManager {
         if (this.watchers.has(watcher)) this.watchers.delete(watcher);
     }
 
-    notify(name: KlaroConsentNotificationType, data: number | Record<string, unknown>, serviceName?: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    notify(name: KlaroConsentNotificationType, data: number | Record<string, unknown>, _serviceName?: string) {
         this.watchers.forEach((watcher) => {
             watcher.update(this, name, data);
         });
@@ -328,7 +299,6 @@ export class ConsentManager {
             if (isIFrameElement(element)) {
                 // this element is already active, we do not touch it...
                 if (consent && element.src === src) {
-                    // eslint-disable-next-line no-console
                     console.debug(
                         `Skipping ${element.tagName} for service ${service.name}, as it already has the correct type...`
                     );
@@ -341,7 +311,6 @@ export class ConsentManager {
                     newElement.setAttribute(attribute.name, attribute.value);
                 }
                 newElement.innerText = element.innerText;
-                newElement.text = element.text;
 
                 if (consent) {
                     if (ds['original-display'] !== undefined) newElement.style.display = ds['original-display'];
@@ -364,41 +333,40 @@ export class ConsentManager {
                 parent?.removeChild(element);
             } else if (isScriptElement(element) || isLinkElement(element)) {
                 // this element is already active, we do not touch it...
-                if (consent && element.type === (type || '') && element.src === src) {
-                    // eslint-disable-next-line no-console
+                const elSrc = isScriptElement(element) ? element.src : (element as HTMLLinkElement).href;
+                if (consent && element.type === (type || '') && elSrc === (src || href)) {
                     console.debug(
                         `Skipping ${element.tagName} for service ${service.name}, as it already has the correct type or src...`
                     );
                     continue;
                 }
-                // we create a new script instead of updating the node in
-                // place, as the script won't start correctly otherwise
-                const newElement = document.createElement(element.tagName) as HTMLScriptElement | HTMLLinkElement;
+                // we create a new element instead of updating the node in
+                // place, as scripts won't start correctly otherwise
+                const newElement = document.createElement(element.tagName) as HTMLElement;
                 for (const attribute of element.attributes) {
                     newElement.setAttribute(attribute.name, attribute.value);
                 }
-
                 newElement.innerText = element.innerText;
-                newElement.text = element.text;
 
                 if (consent) {
-                    newElement.type = type || '';
-                    if (src !== undefined) newElement.src = src;
-                    if (href !== undefined) newElement.href = href;
+                    (newElement as HTMLScriptElement).type = type || '';
+                    if (src !== undefined) (newElement as HTMLScriptElement).src = src;
+                    if (href !== undefined) (newElement as HTMLLinkElement).href = href;
                 } else {
-                    newElement.type = 'text/plain';
+                    (newElement as HTMLScriptElement).type = 'text/plain';
                 }
                 //we remove the original element and insert a new one
                 parent?.insertBefore(newElement, element);
                 parent?.removeChild(element);
             } else {
                 // all other elements (images etc.) are modified in place...
+                const el = element as unknown as Record<string, string>;
                 if (consent) {
                     for (const attr of attrs) {
                         const attrValue = ds[attr];
                         if (attrValue === undefined) continue;
-                        if (ds['original-' + attr] === undefined) ds['original-' + attr] = element[attr];
-                        element[attr] = attrValue;
+                        if (ds['original-' + attr] === undefined) ds['original-' + attr] = el[attr];
+                        el[attr] = attrValue;
                     }
                     if (ds.title !== undefined) element.title = ds.title;
                     if (ds['original-display'] !== undefined) {
@@ -414,7 +382,7 @@ export class ConsentManager {
                     for (const attr of attrs) {
                         const attrValue = ds[attr];
                         if (attrValue === undefined) continue;
-                        if (ds['original-' + attr] !== undefined) element[attr] = ds['original-' + attr];
+                        if (ds['original-' + attr] !== undefined) el[attr] = ds['original-' + attr];
                         else element.removeAttribute(attr);
                     }
                 }
@@ -452,10 +420,8 @@ export class ConsentManager {
 
                 if (!(cookiePattern instanceof RegExp)) {
                     if (cookiePattern.startsWith('^')) {
-                        // we assume this is already a regex
                         cookiePattern = new RegExp(cookiePattern);
                     } else {
-                        // we assume this is a normal string
                         cookiePattern = new RegExp('^' + escapeRegexStr(cookiePattern) + '$');
                     }
                 }
@@ -477,9 +443,6 @@ export class ConsentManager {
                         );
 
                         deleteCookie(cookie.name, cookiePath, cookieDomain);
-                        // if no cookie domain is given, we also try to delete the cookie with
-                        // domain '.[current domain]' as some services set cookies for this
-                        // dotted domain explicitly (e.g. the Facebook pixel).
 
                         if (cookieDomain === undefined) {
                             deleteCookie(cookie.name, cookiePath, '.' + window.location.hostname);
@@ -492,11 +455,13 @@ export class ConsentManager {
 
     private _checkConsents() {
         let complete = true;
+        // eslint-disable-next-line svelte/prefer-svelte-reactivity -- not used for reactivity
         const services = new Set(
             this.config.services.map((service) => {
                 return service.name;
             })
         );
+        // eslint-disable-next-line svelte/prefer-svelte-reactivity -- not used for reactivity
         const consents = new Set(Object.keys(this.consents));
         for (const key of Object.keys(this.consents)) {
             if (!services.has(key)) {

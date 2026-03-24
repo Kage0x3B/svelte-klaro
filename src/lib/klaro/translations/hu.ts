@@ -1,0 +1,76 @@
+export default {
+    privacyPolicy: {
+        name: 'adatvédelmi szabályzat',
+        text: 'Ha többet szeretne megtudni, kérjük, olvassa el az <tr-hint v="privacy policy">{privacyPolicy}</tr-hint> dokumentumot.'
+    },
+    consentModal: {
+        title: 'Az általunk használni kívánt szolgáltatások',
+        description:
+            'Itt beállíthatja vagy testreszabhatja a weboldalon általunk használni kívánt szolgáltatásokat. Ön a kezében van a döntés! Engedélyezze vagy tiltsa a szolgáltatásokat ahogy jónak látja.'
+    },
+    consentNotice: {
+        testing: 'Teszt üzemmód!',
+        title: 'Süti jóváhagyás',
+        changeDescription: 'Utolsó látogatása óta változások történtek. Kérjük újítsa meg jóváhagyását.',
+        description:
+            'Kérhetjük, hogy engedélyezzen néhány kiegészítő szolgáltatást amelynek célja: {purposes}? Később bármikor módosíthatja vagy visszavonhatja jováhagyását.',
+        'learnMore|capitalize': 'Hadd válasszak'
+    },
+    purposes: {
+        functional: {
+            'title|capitalize': 'Szolgáltatás előkészítés',
+            description:
+                'Ezek a szolgáltatások elengedhetetlenek a weboldal megfelelő működéséhez. Nem tilthatja le azokat, mert a szolgáltatás nem működne megfelelően.'
+        },
+        performance: {
+            'title|capitalize': 'Teljesítmény finomhangolás',
+            description:
+                'Ezek a szolgáltatások személyes adatokkal dolgoznak a weboldal által kínált szolgáltatás optimalizálása érdekében.'
+        },
+        marketing: {
+            'title|capitalize': 'Marketing',
+            description:
+                'Ezek a szolgáltatások személyes adatokkal dolgoznak, hogy megfelelő tartalmat jelenítsenek a termékekről, szolgáltatásokról vagy témakörökről amelyek érdekelhetik.'
+        },
+        advertising: {
+            'title|capitalize': 'Hirdetés',
+            description:
+                'Ezek a szolgáltatások személyes adatokkal dolgoznak, hogy testre szabott vagy érdeklődési kör alapú hirdetéseket jelenítsenek meg.'
+        }
+    },
+    purposeItem: {
+        service: 'Egy<tr-snip>service</tr-snip> amelyet telepítek a számítógépemen.',
+        services: 'Néhány <tr-snip>services</tr-snip> amelyet telepítek a számítógépemen.'
+    },
+    'ok|capitalize': 'Rendben van',
+    'save|capitalize': 'Mentés',
+    'decline|capitalize': 'Elutasítom',
+    'close|capitalize': 'Bezárás',
+    'acceptAll|capitalize': 'Mindet elfogadom',
+    'acceptSelected|capitalize': 'Kiválasztottakat elfogadom',
+    service: {
+        disableAll: {
+            'title|capitalize': 'Minden szolgáltatás engedélyezése vagy tiltása',
+            description: 'Használja ezt a kapcsolót az összes szolgáltatás engedélyezéséhez vagy tiltásához.'
+        },
+        optOut: {
+            title: '(kihagyható)',
+            description: 'Ez a szolgáltatás alapértelmezetten betöltődik (de kikapcsolható)'
+        },
+        required: {
+            title: '(mindig szükséges)',
+            description: 'Ez a szolgáltatás mindig szükséges'
+        },
+        purposes: '<tr-snip>purposes</tr-snip> feldolgozás',
+        purpose: '<tr-snip>purpose</tr-snip> feldolgozás'
+    },
+    poweredBy: 'Klaróval megvalósítva!',
+    contextualConsent: {
+        description: 'Szeretné betölteni azt a külső tartalmat, amelyet {title} szolgáltat?',
+        acceptOnce: 'Igen',
+        acceptAlways: 'Mindig',
+        descriptionEmptyStore:
+            'Amennyiben beleegyezik ebbe a szolgáltatásba, el kell fogadnia a következőket: {title} itt: {link}.',
+        modalLinkText: 'Jóváhagyás kezelő'
+    }
+};

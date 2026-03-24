@@ -25,7 +25,8 @@ export interface KlaroConfigInterface {
      * @default { theme: ['light', 'top', 'wide'] }
      */
     styling?: {
-        theme: ('light' | 'top' | 'wide')[];
+        theme?: ('top' | 'bottom' | 'left' | 'right' | 'wide' | 'light')[];
+        [cssVariable: string]: unknown;
     };
 
     /**
@@ -231,4 +232,43 @@ export interface KlaroConfigInterface {
     callback?: (consent: boolean, service: KlaroServiceInterface) => void;
 
     optOut?: boolean;
+
+    /**
+     * @deprecated Use `services` instead
+     */
+    apps?: KlaroServiceInterface[];
+
+    /**
+     * If true, the cookie notice is not shown initially.
+     * @default false
+     */
+    noNotice?: boolean;
+
+    /**
+     * If true, hide the "toggle all" switch.
+     * @default false
+     */
+    hideToggleAll?: boolean;
+
+    /**
+     * Order of purposes in the consent modal.
+     */
+    purposeOrder?: string[];
+
+    /**
+     * Privacy policy URL. Can be a string or an object mapping language codes to URLs.
+     */
+    privacyPolicy?: string | Record<string, string>;
+
+    /**
+     * URL for the "powered by" link.
+     * @default 'https://kiprotect.com/klaro'
+     */
+    poweredBy?: string;
+
+    /**
+     * CSS class prefix for the root element.
+     * @default 'klaro'
+     */
+    stylePrefix?: string;
 }

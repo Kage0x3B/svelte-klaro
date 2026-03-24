@@ -1,9 +1,10 @@
 import type { KlaroConfigInterface } from '$lib/klaro/types/klaro-config.interface.js';
 import type { NestedMap, NestedRecord } from '$lib/klaro/utils/maps.js';
 
-const format = (str: string, ...rest: (string | number)[]) => {
+const format = (str: string, ...rest: unknown[]) => {
     const t = typeof rest[0];
-    let args;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let args: any;
 
     if (rest.length === 0) {
         args = {};
@@ -11,23 +12,20 @@ const format = (str: string, ...rest: (string | number)[]) => {
         args = t === 'string' || t === 'number' ? Array.prototype.slice.call(rest) : rest[0];
     }
 
-    const splits = [];
+    const splits: unknown[] = [];
 
     let s = str.toString();
     while (s.length > 0) {
         const m = s.match(/\{(?!\{)([\w\d]+)\}(?!\})/);
 
         if (m !== null) {
-            const left = s.substr(0, m.index);
-            s = s.substr(m.index + m[0].length);
+            const left = s.substring(0, m.index!);
+            s = s.substring(m.index! + m[0].length);
             const n = parseInt(m[1]);
             splits.push(left);
-            // eslint-disable-next-line eqeqeq
-            if (n != n) {
-                // not a number
+            if (Number.isNaN(n)) {
                 splits.push(args[m[1]]);
             } else {
-                // a numbered argument
                 splits.push(args[n]);
             }
         } else {
@@ -41,9 +39,9 @@ const format = (str: string, ...rest: (string | number)[]) => {
 export function language(config: KlaroConfigInterface) {
     // if a language is given in the config we always return that
     if (config !== undefined && config.lang !== undefined && config.lang !== 'zz') return config.lang;
+    const docLang = typeof document !== 'undefined' ? document.documentElement.lang : '';
     const lang = (
-        (typeof window.language === 'string' ? window.language : null) ||
-        document.documentElement.lang ||
+        docLang ||
         (config !== undefined && config.languages !== undefined && config.languages[0] !== undefined
             ? config.languages[0]
             : 'en')
@@ -56,13 +54,14 @@ export function language(config: KlaroConfigInterface) {
     return result[1];
 }
 
-function hget<T>(d: NestedRecord | NestedMap | undefined, key: string | string[], defaultValue?: T): T | undefined {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hget<T>(d: any, key: string | string[], defaultValue?: T): T | undefined {
     const kl = Array.isArray(key) ? key : [key];
 
     let cv = d;
 
     for (let i = 0; i < kl.length; i++) {
-        if (cv === undefined) {
+        if (cv === undefined || cv === null) {
             return defaultValue;
         }
 
@@ -77,7 +76,6 @@ function hget<T>(d: NestedRecord | NestedMap | undefined, key: string | string[]
             }
 
             if (cvn !== undefined && typeof cvn === 'string') {
-                // we only assign it if the value exists
                 cv = cvn;
             }
         } else {
@@ -88,13 +86,18 @@ function hget<T>(d: NestedRecord | NestedMap | undefined, key: string | string[]
             }
         }
     }
-    if (cv === undefined || !(typeof cv === 'string')) return defaultValue;
-    // we convert empty strings to 'undefined'
+    if (cv === undefined || typeof cv !== 'string') return defaultValue;
     if (cv === '') return undefined;
-    return cv;
+    return cv as T;
 }
 
-export function t(trans, lang, fallbackLang, key, ...params) {
+export function t(
+    trans: NestedRecord | NestedMap | undefined,
+    lang: string,
+    fallbackLang: string | undefined,
+    key: string | string[],
+    ...params: unknown[]
+) {
     let kl = key;
     let returnUndefined = false;
     if (kl[0] === '!') {
@@ -110,6 +113,6 @@ export function t(trans, lang, fallbackLang, key, ...params) {
         if (returnUndefined) return undefined;
         return [`[missing translation: ${lang}/${kl.join('/')}]`];
     }
-    if (params.length > 0) return format(value, ...params);
+    if (params.length > 0) return format(value as string, ...params);
     return value;
 }

@@ -2,7 +2,7 @@ import type { KlaroConfigInterface } from '$lib/klaro/types/klaro-config.interfa
 import { convertToMap, type NestedMap, update } from '$lib/klaro/utils/maps.js';
 import type { KlaroEventArgs, KlaroEventHandler, KlaroEventType } from '$lib/klaro/types/klaro-events.type.js';
 import KlaroApi from '$lib/klaro/utils/api.js';
-import { ConsentManager } from '$lib/klaro/consent-manager.js';
+import { ConsentManager } from '$lib/klaro/consent-manager.svelte.js';
 
 export { updateConfig } from './utils/config.js';
 
@@ -166,5 +166,37 @@ export class KlaroInstance {
     }
 }
 
-// TODO: Can this be replaced with a dynamic value? Maybe not because this is actually the fixed klaro package version, not from the package.json. Or should the version be modified with a -svelte prefix?
-export const version = '0.7.22' as const;
+export const version = '0.8.0-svelte' as const;
+
+// Module-level active instance for imperative show/hide
+export interface KlaroActiveInstance {
+    show: (modal?: boolean) => void;
+    hide: () => void;
+    getManager: () => ConsentManager;
+}
+
+let activeInstance: KlaroActiveInstance | undefined;
+
+export function setActiveInstance(instance: KlaroActiveInstance) {
+    activeInstance = instance;
+}
+
+export function showKlaro(modal?: boolean) {
+    if (!activeInstance) {
+        console.warn('Klaro: No active instance. Make sure <Klaro> is mounted.');
+        return;
+    }
+    activeInstance.show(modal);
+}
+
+export function hideKlaro() {
+    if (!activeInstance) {
+        console.warn('Klaro: No active instance. Make sure <Klaro> is mounted.');
+        return;
+    }
+    activeInstance.hide();
+}
+
+export function getManager(): ConsentManager | undefined {
+    return activeInstance?.getManager();
+}

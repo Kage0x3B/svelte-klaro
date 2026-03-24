@@ -39,7 +39,7 @@ export default class KlaroApi {
 
     getUserData(): { client_version: string; client_name: string } {
         return {
-            client_version: version(),
+            client_version: version,
             client_name: 'klaro:web'
         };
     }

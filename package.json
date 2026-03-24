@@ -1,5 +1,5 @@
 {
-    "name": "klaro-svelte",
+    "name": "svelte-klaro",
     "version": "0.0.1",
     "scripts": {
         "dev": "vite dev",
@@ -19,38 +19,46 @@
         ".": {
             "types": "./dist/index.d.ts",
             "svelte": "./dist/index.js"
-        }
+        },
+        "./translations": {
+            "types": "./dist/klaro/translations/index.d.ts",
+            "import": "./dist/klaro/translations/index.js"
+        },
+        "./styles": "./dist/scss/klaro.css"
     },
     "files": [
         "dist",
         "!dist/**/*.test.*",
         "!dist/**/*.spec.*"
     ],
+    "sideEffects": [
+        "**/*.css"
+    ],
     "peerDependencies": {
-        "svelte": "^5.0.0-next.1"
+        "svelte": "^5.0.0"
     },
     "devDependencies": {
-        "@playwright/test": "^1.45.2",
-        "@sveltejs/adapter-auto": "^3.2.2",
-        "@sveltejs/kit": "^2.5.18",
-        "@sveltejs/package": "^2.3.2",
-        "@sveltejs/vite-plugin-svelte": "^3.1.1",
-        "@types/eslint": "^8.56.10",
-        "eslint": "^9.7.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-svelte": "^2.43.0",
-        "globals": "^15.8.0",
-        "klaro": "^0.7.21",
-        "prettier": "^3.3.3",
-        "prettier-plugin-svelte": "^3.2.6",
-        "publint": "^0.2.9",
-        "svelte": "^5.0.0-next.192",
-        "svelte-check": "^3.8.4",
-        "tslib": "^2.6.3",
-        "typescript": "^5.5.3",
-        "typescript-eslint": "8.0.0-alpha.47",
-        "vite": "^5.3.4",
-        "vitest": "^2.0.3"
+        "@eslint/js": "^10.0.1",
+        "@playwright/test": "^1.58.2",
+        "@sveltejs/adapter-auto": "^7.0.1",
+        "@sveltejs/kit": "^2.55.0",
+        "@sveltejs/package": "^2.5.7",
+        "@sveltejs/vite-plugin-svelte": "^7.0.0",
+        "eslint": "^10.1.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-svelte": "^3.16.0",
+        "globals": "^17.4.0",
+        "prettier": "^3.8.1",
+        "prettier-plugin-svelte": "^3.5.1",
+        "publint": "^0.3.18",
+        "sass": "^1.98.0",
+        "svelte": "^5.55.0",
+        "svelte-check": "^4.4.5",
+        "tslib": "^2.8.1",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "8.57.1",
+        "vite": "^8.0.2",
+        "vitest": "^4.1.1"
     },
     "svelte": "./dist/index.js",
     "types": "./dist/index.d.ts",
