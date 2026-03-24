@@ -3,6 +3,12 @@ import type { KlaroStorageMethod } from '$lib/klaro/stores.js';
 
 export interface KlaroConfigInterface {
     /**
+     * Config identifier, typically set by the KIProtect API. Used in consent
+     * receipts to identify which config version the user consented to.
+     */
+    id?: string;
+
+    /**
      * With the 0.7.0 release we introduce a 'version' paramter that will make
      * it easier for us to keep configuration files backwards-compatible in the future.
      */
@@ -271,4 +277,15 @@ export interface KlaroConfigInterface {
      * @default 'klaro'
      */
     stylePrefix?: string;
+
+    /**
+     * Controls what data is included in consent receipts sent to the API.
+     */
+    records?: {
+        /**
+         * Whether to include the page pathname in consent receipts.
+         * @default true
+         */
+        savePathname?: boolean;
+    };
 }

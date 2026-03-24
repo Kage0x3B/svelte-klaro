@@ -42,6 +42,15 @@
         klaroApiUrl?: string;
 
         /**
+         * When `klaroId` is set, consent changes are automatically submitted to
+         * the KIProtect API as consent receipts. Set this to `true` to disable
+         * that behavior. Has no effect without `klaroId`.
+         *
+         * @default false
+         */
+        disableConsentTracking?: boolean;
+
+        /**
          * Additional translations to merge on top of the bundled English defaults
          * and any translations in config. Useful when config is loaded from a remote
          * API and doesn't include translations. Pass language objects imported from
@@ -64,6 +73,7 @@
         klaroId,
         klaroConfigName,
         klaroApiUrl,
+        disableConsentTracking = false,
         translations: translationsProp,
         onconsentchange,
         onsave,
@@ -133,6 +143,33 @@
         // API setup
         if (klaroId) {
             api = new KlaroApi(klaroApiUrl || 'https://api.kiprotect.com', klaroId, { testing });
+
+            // Submit consent receipts to the KIProtect API when the user saves
+            if (!disableConsentTracking) {
+                const configForApi = { ...cfg, id: cfg.id || klaroId! };
+                const consentTrackingWatcher: KlaroConsentWatcher = {
+                    update(_m, type, data) {
+                        if (type === 'saveConsents') {
+                            const saveData = data as {
+                                changes: Record<string, unknown>;
+                                consents: Record<string, boolean>;
+                                type: string;
+                            };
+                            api!.update(
+                                { config: configForApi },
+                                'saveConsents',
+                                {
+                                    type: 'save',
+                                    changes: saveData.changes,
+                                    consents: saveData.consents,
+                                    config: configForApi
+                                }
+                            );
+                        }
+                    }
+                };
+                mgr.watch(consentTrackingWatcher);
+            }
         }
 
         // KlaroInstance for API event handlers
