@@ -120,6 +120,11 @@
     }
 </script>
 
+<svelte:head>
+    <title>svelte-klaro — Interactive Demo</title>
+    <meta property="og:title" content="svelte-klaro — Interactive Demo" />
+</svelte:head>
+
 <div class="demo">
     <header class="demo-header">
         <h1>svelte-klaro</h1>
@@ -260,13 +265,6 @@
 {/key}
 
 <style>
-    :global(body) {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: #fafafa;
-        color: #333;
-    }
-
     .demo {
         max-width: 720px;
         margin: 0 auto;

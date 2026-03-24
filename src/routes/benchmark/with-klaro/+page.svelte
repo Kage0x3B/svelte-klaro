@@ -1,22 +1,70 @@
 <script lang="ts">
-    import '$lib/scss/klaro.scss';
-    import { Klaro } from '$lib/index.js';
-    import type { KlaroConfigInterface } from '$lib/klaro/types/klaro-config.interface.js';
-    import Counter from '../Counter.svelte';
-    import TodoList from '../TodoList.svelte';
+	import '$lib/scss/klaro.scss';
+	import { Klaro, getManager } from '$lib/index.js';
+	import type { KlaroConfigInterface } from '$lib/klaro/types/klaro-config.interface.js';
+	import Counter from '../Counter.svelte';
+	import TodoList from '../TodoList.svelte';
+	import ConsentGatedWidget from '../ConsentGatedWidget.svelte';
 
-    const config: KlaroConfigInterface = {
-        acceptAll: true,
-        services: [
-            { name: 'analytics', title: 'Analytics', purposes: ['analytics'] },
-            { name: 'ads', title: 'Ads', purposes: ['marketing'] }
-        ]
-    };
+	const config: KlaroConfigInterface = {
+		acceptAll: true,
+		services: [
+			{ name: 'analytics', title: 'Analytics', purposes: ['analytics'] },
+			{ name: 'ads', title: 'Ads', purposes: ['marketing'] }
+		]
+	};
+
+	let analyticsConsent = $state(false);
+	let consentTimestamp = $state('');
+
+	function updateConsent() {
+		const consent = !!getManager()?.getConsent('analytics');
+		if (consent && !analyticsConsent) {
+			consentTimestamp = new Date().toLocaleTimeString();
+		}
+		analyticsConsent = consent;
+	}
 </script>
+
+<svelte:head>
+	<title>Benchmark: With Klaro — svelte-klaro</title>
+</svelte:head>
 
 <h1>With Klaro (English only)</h1>
 <p>Same page content, with consent manager. No extra translations loaded.</p>
 <Counter />
 <TodoList />
 
-<Klaro {config} />
+{#if analyticsConsent}
+	<ConsentGatedWidget timestamp={consentTimestamp} />
+{:else}
+	<div class="widget-placeholder">
+		<span>&#x26a0;</span>
+		<p>This widget requires <strong>analytics</strong> consent to load.</p>
+	</div>
+{/if}
+
+<Klaro {config} onconsentchange={updateConsent} oninit={updateConsent} onsave={updateConsent} />
+
+<style>
+	.widget-placeholder {
+		margin-top: 16px;
+		border: 2px dashed #ccc;
+		border-radius: 8px;
+		padding: 20px;
+		max-width: 400px;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: #888;
+		font-size: 13px;
+	}
+
+	.widget-placeholder span {
+		font-size: 24px;
+	}
+
+	.widget-placeholder p {
+		margin: 0;
+	}
+</style>

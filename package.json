@@ -70,6 +70,7 @@
         "@eslint/js": "^10.0.1",
         "@playwright/test": "^1.58.2",
         "@sveltejs/adapter-auto": "^7.0.1",
+        "@sveltejs/adapter-cloudflare": "^7.2.8",
         "@sveltejs/kit": "^2.55.0",
         "@sveltejs/package": "^2.5.7",
         "@sveltejs/vite-plugin-svelte": "^7.0.0",
@@ -87,7 +88,8 @@
         "typescript": "^5.8.3",
         "typescript-eslint": "8.57.1",
         "vite": "^8.0.2",
-        "vitest": "^4.1.1"
+        "vitest": "^4.1.1",
+        "wrangler": "^4.77.0"
     },
     "svelte": "./dist/index.js",
     "types": "./dist/index.d.ts",
