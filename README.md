@@ -6,6 +6,7 @@ A Svelte 5 port of the [Klaro](https://github.com/kiprotect/klaro) cookie consen
 
 - Svelte 5, fully typed
 - 1:1 UI/UX match with the original Klaro
+- **12 KB gzipped** (vs 66 KB for original klaro with Preact)
 - 25 tree-shakeable translations (only English bundled by default)
 - CSS custom property theming with composable position/color themes
 - Cookie deletion on consent withdrawal
@@ -264,6 +265,18 @@ export async function load({ fetch }) {
 ## SSR
 
 svelte-klaro is SSR-safe. During server-side rendering it outputs nothing (the consent manager requires browser APIs). The consent notice appears on client hydration.
+
+## Bundle Size
+
+The original klaro ships Preact as a runtime dependency. svelte-klaro has almost no runtime framework overhead since Svelte compiles to vanilla JS:
+
+|                                | Minified | Gzipped |
+| ------------------------------ | -------- | ------- |
+| **Original klaro (Preact)**    | 216 KB   | 66 KB   |
+| **svelte-klaro (en only)**     | 39 KB    | 12 KB   |
+| **svelte-klaro + 3 languages** | 46 KB    | 14 KB   |
+
+Translations are tree-shakeable — only imported languages are bundled. Each additional language adds ~2 KB minified / <1 KB gzipped.
 
 ## Types
 
